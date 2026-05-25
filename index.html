@@ -1,3 +1,4 @@
+cat > /mnt/user-data/outputs/index.html << 'HTMLEOF'
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -6,430 +7,477 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/>
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
 <meta name="apple-mobile-web-app-title" content="GYM CASA"/>
-<meta name="theme-color" content="#0a0a0a"/>
+<meta name="theme-color" content="#070709"/>
 <title>GYM CASA 💪</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --bg: #080808;
-    --surface: #111114;
-    --surface2: #18181c;
-    --border: #222226;
-    --text: #f2f2f0;
-    --muted: #555560;
-    --accent: #FF4D4D;
-    --green: #2ecc71;
-    --radius: 14px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body {
-    height: 100%;
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overscroll-behavior: none;
-    overflow-x: hidden;
-  }
-  body { display: flex; flex-direction: column; }
+:root {
+  --bg: #070709;
+  --s1: #0f0f12;
+  --s2: #161619;
+  --s3: #1e1e22;
+  --border: #25252a;
+  --text: #efefed;
+  --muted: #52525e;
+  --dim: #35353f;
+  --green: #3ecf6e;
+  --r: 13px;
+  --font: 'Outfit', sans-serif;
+  --display: 'Bebas Neue', sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--font);overscroll-behavior:none;overflow:hidden}
+body{display:flex;flex-direction:column;height:100dvh}
 
-  /* ── HEADER ── */
-  #header {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--bg);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 18px 10px;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  #header-top { display: flex; justify-content: space-between; align-items: center; }
-  #app-title { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 2px; color: var(--text); }
-  #day-label { font-size: 11px; font-weight: 700; letter-spacing: 3px; color: var(--accent); transition: color .3s; }
-  #reset-btn {
-    background: var(--surface2); border: 1px solid var(--border); color: var(--muted);
-    font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 700;
-    padding: 6px 12px; border-radius: 20px; cursor: pointer;
-    transition: all .2s;
-  }
-  #reset-btn:active { transform: scale(.95); }
+/* HEADER */
+#hdr{flex-shrink:0;padding:16px 18px 10px;background:var(--bg);border-bottom:1px solid var(--border);position:relative;z-index:10}
+#hdr-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+#app-name{font-family:var(--display);font-size:26px;letter-spacing:2px;line-height:1}
+#app-sub{font-size:10px;font-weight:600;letter-spacing:3px;color:var(--muted);margin-top:2px}
+#day-pill{font-size:10px;font-weight:700;letter-spacing:2px;padding:5px 11px;border-radius:20px;border:1.5px solid var(--border);color:var(--muted);transition:all .3s}
+#prog-row{display:flex;align-items:center;gap:10px}
+#prog-bg{flex:1;height:3px;background:var(--s3);border-radius:3px;overflow:hidden}
+#prog-fill{height:100%;width:0;border-radius:3px;background:var(--accent,#FF4D4D);transition:width .4s ease,background .3s}
+#prog-num{font-size:11px;font-weight:700;color:var(--muted);min-width:28px;text-align:right;transition:color .3s}
 
-  /* progress bar */
-  #prog-wrap { display: flex; align-items: center; gap: 10px; }
-  #prog-bar-bg { flex: 1; height: 3px; background: var(--border); border-radius: 3px; overflow: hidden; }
-  #prog-bar { height: 100%; width: 0%; border-radius: 3px; background: var(--accent); transition: width .4s ease, background .3s; }
-  #prog-text { font-size: 11px; font-weight: 700; color: var(--muted); min-width: 32px; text-align: right; transition: color .3s; }
+/* TABS */
+#tabs{flex-shrink:0;display:flex;gap:6px;padding:10px 14px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border)}
+#tabs::-webkit-scrollbar{display:none}
+.tab{display:inline-flex;flex-direction:column;align-items:center;gap:2px;padding:7px 13px;border-radius:9px;border:1.5px solid var(--border);background:var(--s1);color:var(--muted);font-family:var(--font);font-size:9px;font-weight:700;letter-spacing:1.5px;cursor:pointer;flex-shrink:0;transition:all .2s;position:relative}
+.tab .tnum{font-family:var(--display);font-size:17px;letter-spacing:1px;line-height:1}
+.tab.active{color:var(--tc);border-color:var(--tc);background:color-mix(in srgb,var(--tc) 12%,transparent)}
+.tab .tdot{width:4px;height:4px;border-radius:50%;background:var(--green);opacity:0;transition:opacity .3s;margin-top:1px}
+.tab.done .tdot{opacity:1}
 
-  /* ── DAY TABS ── */
-  #tabs-scroll {
-    overflow-x: auto; white-space: nowrap;
-    padding: 12px 16px;
-    scrollbar-width: none;
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-  }
-  #tabs-scroll::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    display: inline-flex; flex-direction: column; align-items: center;
-    gap: 3px; padding: 8px 16px;
-    margin-right: 6px;
-    border-radius: 10px; border: 1.5px solid var(--border);
-    background: var(--surface); color: var(--muted);
-    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
-    letter-spacing: 1.5px; cursor: pointer;
-    transition: all .2s; user-select: none;
-  }
-  .tab-btn .tab-num { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 1px; }
-  .tab-btn.active { color: var(--tab-color); border-color: var(--tab-color); background: color-mix(in srgb, var(--tab-color) 12%, transparent); }
-  .tab-btn .tab-done-dot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--green); opacity: 0;
-    transition: opacity .3s;
-  }
-  .tab-btn.done .tab-done-dot { opacity: 1; }
+/* MAIN SCROLL */
+#main{flex:1;overflow-y:auto;overflow-x:hidden;padding:14px 13px 90px;scroll-behavior:smooth}
+#main::-webkit-scrollbar{width:3px}
+#main::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-  /* ── CONTENT ── */
-  #content { flex: 1; overflow-y: auto; padding: 16px 14px 100px; }
+/* DAY CARD */
+.day-hdr{border-radius:var(--r);padding:16px 18px;margin-bottom:12px;background:color-mix(in srgb,var(--dc) 9%,var(--s1));border:1px solid color-mix(in srgb,var(--dc) 22%,transparent)}
+.day-hdr h2{font-family:var(--display);font-size:28px;letter-spacing:2px;color:var(--text);line-height:1}
+.day-hdr .dsub{font-size:11px;color:var(--muted);margin-top:3px;font-weight:500}
+.day-hdr .dtag{display:inline-block;margin-top:8px;font-size:10px;font-weight:700;letter-spacing:2px;padding:3px 9px;border-radius:4px;background:color-mix(in srgb,var(--dc) 18%,transparent);color:var(--dc)}
 
-  /* day header card */
-  .day-header {
-    border-radius: var(--radius); padding: 18px 18px 14px;
-    margin-bottom: 14px;
-    background: color-mix(in srgb, var(--day-color) 10%, var(--surface));
-    border: 1px solid color-mix(in srgb, var(--day-color) 25%, transparent);
-  }
-  .day-header h2 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; letter-spacing: 2px; color: var(--text); }
-  .day-header .day-sub { font-size: 11px; font-weight: 500; color: var(--muted); margin-top: 2px; letter-spacing: .5px; }
+/* EXERCISE CARDS */
+.ex{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);margin-bottom:8px;cursor:pointer;transition:all .2s;overflow:hidden}
+.ex:active{transform:scale(.985)}
+.ex.done{background:color-mix(in srgb,var(--green) 5%,var(--s1));border-color:color-mix(in srgb,var(--green) 18%,var(--border))}
+.ex-inner{display:flex;align-items:flex-start;gap:12px;padding:13px 15px}
+.chk{width:22px;height:22px;border-radius:6px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--green);flex-shrink:0;margin-top:2px;transition:all .25s}
+.ex.done .chk{background:color-mix(in srgb,var(--green) 15%,transparent);border-color:var(--green)}
+.ex-body{flex:1;min-width:0}
+.ex-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:5px;line-height:1.3;transition:color .2s}
+.ex.done .ex-name{color:var(--muted);text-decoration:line-through}
+.ex-badges{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px}
+.bdg{font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px}
+.bdg.col{background:color-mix(in srgb,var(--dc) 15%,var(--s2));color:var(--dc)}
+.bdg.neu{background:var(--s2);color:#888}
+.bdg.tip{background:color-mix(in srgb,#f59e0b 10%,var(--s2));color:#f59e0b}
+.ex-nota{font-size:11px;color:var(--muted);font-style:italic;line-height:1.5}
 
-  /* ── EXERCISE CARDS ── */
-  .ex-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    margin-bottom: 10px;
-    overflow: hidden;
-    transition: all .25s;
-    cursor: pointer;
-    active-scale: .98;
-  }
-  .ex-card:active { transform: scale(.985); }
-  .ex-card.done { background: color-mix(in srgb, var(--green) 6%, var(--surface)); border-color: color-mix(in srgb, var(--green) 20%, var(--border)); }
-  .ex-inner { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; }
-  .ex-check {
-    width: 24px; height: 24px; border-radius: 7px; flex-shrink: 0; margin-top: 1px;
-    border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; color: var(--green);
-    transition: all .25s; background: transparent;
-  }
-  .ex-card.done .ex-check { background: color-mix(in srgb, var(--green) 18%, transparent); border-color: var(--green); }
-  .ex-info { flex: 1; }
-  .ex-name {
-    font-weight: 700; font-size: 14px; color: var(--text);
-    transition: color .2s; line-height: 1.3; margin-bottom: 6px;
-  }
-  .ex-card.done .ex-name { color: var(--muted); text-decoration: line-through; }
-  .ex-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 6px; }
-  .badge {
-    font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 5px;
-    background: color-mix(in srgb, var(--badge-color) 15%, var(--surface2));
-    color: var(--badge-color);
-  }
-  .badge.gray { --badge-color: #888; }
-  .ex-nota { font-size: 11px; color: var(--muted); font-style: italic; line-height: 1.5; }
+/* SECTION LABELS */
+.slabel{font-size:9px;font-weight:800;letter-spacing:3px;color:var(--dim);margin:18px 0 9px 2px}
 
-  /* ── SECTION TITLE ── */
-  .section-title {
-    font-size: 10px; font-weight: 700; letter-spacing: 3px;
-    color: var(--muted); margin: 20px 0 10px 2px;
-  }
+/* FOOD SECTION */
+.day-food{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:10px}
+.food-hdr{padding:12px 15px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.food-hdr .fd{font-size:13px;font-weight:700}
+.food-hdr .fkcal{font-size:11px;font-weight:700;color:#f59e0b;background:color-mix(in srgb,#f59e0b 10%,var(--s2));padding:3px 8px;border-radius:5px}
+.meal{padding:11px 15px;border-bottom:1px solid var(--border)}
+.meal:last-child{border-bottom:none}
+.meal-time{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--muted);margin-bottom:3px}
+.meal-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px}
+.meal-desc{font-size:11px;color:var(--muted);line-height:1.5}
+.meal-macros{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}
+.macro{font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px}
+.macro.p{background:color-mix(in srgb,#3ecf6e 12%,var(--s2));color:#3ecf6e}
+.macro.c{background:color-mix(in srgb,#60a5fa 12%,var(--s2));color:#60a5fa}
+.macro.g{background:color-mix(in srgb,#f59e0b 12%,var(--s2));color:#f59e0b}
 
-  /* ── TIPS ── */
-  .tip-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; padding: 11px 14px;
-    font-size: 12px; color: #777; line-height: 1.6; margin-bottom: 8px;
-  }
+/* TIPS */
+.tip-card{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:11px 14px;font-size:12px;color:#777;line-height:1.6;margin-bottom:7px}
 
-  /* ── EQUIPO ── */
-  .equipo-card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px;
-  }
-  .equipo-row { display: flex; align-items: center; gap: 10px; padding: 6px 0; font-size: 13px; border-bottom: 1px solid var(--border); }
-  .equipo-row:last-child { border-bottom: none; }
-  .equipo-row .icon { font-size: 18px; }
-  .equipo-row strong { color: var(--text); }
-  .equipo-row span { color: var(--muted); font-size: 12px; }
+/* EQUIPO */
+.eq-card{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:8px}
+.eq-row{display:flex;align-items:center;gap:12px;padding:12px 15px;border-bottom:1px solid var(--border)}
+.eq-row:last-child{border-bottom:none}
+.eq-icon{font-size:20px;flex-shrink:0}
+.eq-txt strong{display:block;font-size:13px;font-weight:700;color:var(--text);margin-bottom:1px}
+.eq-txt span{font-size:11px;color:var(--muted)}
 
-  /* ── COMPLETION BANNER ── */
-  #done-banner {
-    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--green); color: #000; font-weight: 800; font-size: 13px;
-    padding: 10px 22px; border-radius: 30px; letter-spacing: 1px;
-    opacity: 0; pointer-events: none;
-    transition: all .4s cubic-bezier(.34,1.56,.64,1);
-    white-space: nowrap; z-index: 200;
-  }
-  #done-banner.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+/* MACRO SUMMARY */
+.macro-sum{background:var(--s1);border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;margin-bottom:10px}
+.macro-sum-title{font-size:9px;font-weight:800;letter-spacing:3px;color:var(--muted);margin-bottom:10px}
+.macro-bars{display:flex;flex-direction:column;gap:8px}
+.mbar-row{display:flex;align-items:center;gap:10px}
+.mbar-label{font-size:11px;font-weight:700;color:var(--text);min-width:72px}
+.mbar-bg{flex:1;height:5px;background:var(--s3);border-radius:5px;overflow:hidden}
+.mbar-fill{height:100%;border-radius:5px}
+.mbar-val{font-size:11px;font-weight:700;color:var(--muted);min-width:38px;text-align:right}
 
-  /* ── BOTTOM NAV ── */
-  #bottom-nav {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: color-mix(in srgb, var(--bg) 92%, transparent);
-    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--border);
-    display: flex; justify-content: space-around; align-items: center;
-    padding: 8px 0 max(8px, env(safe-area-inset-bottom));
-    z-index: 100;
-  }
-  .nav-btn {
-    display: flex; flex-direction: column; align-items: center; gap: 3px;
-    padding: 6px 18px; border-radius: 10px; cursor: pointer;
-    border: none; background: transparent; color: var(--muted);
-    font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 700;
-    letter-spacing: 1px; transition: all .2s;
-  }
-  .nav-btn.active { color: var(--accent); }
-  .nav-btn .nav-icon { font-size: 20px; }
+/* DONE BANNER */
+#banner{position:fixed;bottom:82px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--green);color:#000;font-weight:800;font-size:12px;padding:9px 20px;border-radius:30px;letter-spacing:1px;opacity:0;pointer-events:none;transition:all .4s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;z-index:200}
+#banner.show{opacity:1;transform:translateX(-50%) translateY(0)}
 
-  /* scrollbar */
-  #content::-webkit-scrollbar { width: 4px; }
-  #content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+/* BOTTOM NAV */
+#nav{position:fixed;bottom:0;left:0;right:0;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-top:1px solid var(--border);display:flex;justify-content:space-around;padding:8px 0 max(8px,env(safe-area-inset-bottom));z-index:100}
+.nbtn{display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 20px;border-radius:10px;cursor:pointer;border:none;background:transparent;color:var(--muted);font-family:var(--font);font-size:9px;font-weight:700;letter-spacing:1.5px;transition:all .2s}
+.nbtn .ni{font-size:19px}
+.nbtn.active{color:var(--accent-nav,#FF4D4D)}
+
+/* WEEK TABS for food */
+.week-tabs{display:flex;gap:5px;margin-bottom:12px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.week-tabs::-webkit-scrollbar{display:none}
+.wtab{flex-shrink:0;padding:6px 12px;border-radius:8px;border:1.5px solid var(--border);background:var(--s1);color:var(--muted);font-size:10px;font-weight:700;letter-spacing:1px;cursor:pointer;transition:all .2s;font-family:var(--font)}
+.wtab.active{border-color:#f59e0b;color:#f59e0b;background:color-mix(in srgb,#f59e0b 10%,transparent)}
+
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.fadein{animation:fadeIn .25s ease forwards}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div id="header">
-  <div id="header-top">
-    <div>
-      <div id="app-title">GYM CASA</div>
-      <div id="day-label">DÍA 1 · PECHO + TRÍCEPS</div>
-    </div>
-    <button id="reset-btn" onclick="resetDay()">↺ Reset</button>
+<div id="hdr">
+  <div id="hdr-top">
+    <div><div id="app-name">GYM CASA</div><div id="app-sub">PÉRDIDA DE GRASA · TONO MUSCULAR</div></div>
+    <div id="day-pill">DÍA 1</div>
   </div>
-  <div id="prog-wrap">
-    <div id="prog-bar-bg"><div id="prog-bar"></div></div>
-    <div id="prog-text">0/0</div>
+  <div id="prog-row">
+    <div id="prog-bg"><div id="prog-fill"></div></div>
+    <div id="prog-num">0/0</div>
   </div>
 </div>
 
-<!-- TABS -->
-<div id="tabs-scroll"></div>
+<div id="tabs"></div>
+<div id="main"></div>
 
-<!-- CONTENT -->
-<div id="content"></div>
+<div id="banner">✓ ¡DÍA COMPLETADO!</div>
 
-<!-- DONE BANNER -->
-<div id="done-banner">✓ ¡DÍA COMPLETADO!</div>
-
-<!-- BOTTOM NAV -->
-<div id="bottom-nav">
-  <button class="nav-btn active" id="nav-rutina" onclick="showView('rutina')">
-    <span class="nav-icon">🏋️</span>RUTINA
-  </button>
-  <button class="nav-btn" id="nav-tips" onclick="showView('tips')">
-    <span class="nav-icon">💡</span>TIPS
-  </button>
-  <button class="nav-btn" id="nav-equipo" onclick="showView('equipo')">
-    <span class="nav-icon">⚙️</span>EQUIPO
-  </button>
+<div id="nav">
+  <button class="nbtn active" id="nb-rutina" onclick="setView('rutina')"><span class="ni">🏋️</span>RUTINA</button>
+  <button class="nbtn" id="nb-comida" onclick="setView('comida')"><span class="ni">🍽️</span>COMIDA</button>
+  <button class="nbtn" id="nb-tips" onclick="setView('tips')"><span class="ni">💡</span>TIPS</button>
+  <button class="nbtn" id="nb-equipo" onclick="setView('equipo')"><span class="ni">⚙️</span>EQUIPO</button>
 </div>
 
 <script>
+// ─────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────
 const DIAS = [
   {
-    dia:"DÍA 1", nombre:"PECHO + TRÍCEPS", color:"#FF4D4D",
+    dia:"DÍA 1", nombre:"PECHO + TRÍCEPS", color:"#FF4D4D", tag:"EMPUJE SUPERIOR",
+    nota:"Reps altas, peso moderado — tono sin volumen excesivo",
     ejercicios:[
-      {n:"Press de banca con barra", s:4, r:"8–10", nota:"Agarre ancho, baja controlado hasta el pecho"},
-      {n:"Press banca agarre cerrado", s:4, r:"10–12", nota:"Manos juntas, activa el tríceps al empujar"},
-      {n:"Plancha normal", s:4, r:"12–15", nota:"Codos a 45°, no abras los codos al bajar"},
-      {n:"Fondos entre sillas", s:3, r:"12–15", nota:"Inclina el torso al frente para activar más pecho"},
-      {n:"Pull-over con mancuerna", s:3, r:"12", nota:"Estira bien el pecho al bajar, respira profundo"},
+      {n:"Press de banca con barra", s:4, r:"12–15", tipo:"Principal", nota:"Peso controlado, baja en 3 seg, sube explosivo"},
+      {n:"Press banca agarre cerrado", s:3, r:"15", tipo:"Tríceps", nota:"Manos juntas, activa el tríceps al empujar"},
+      {n:"Plancha normal", s:4, r:"15", tipo:"Principal", nota:"Codos a 45°, baja despacio, siente el pecho"},
+      {n:"Fondos entre sillas", s:3, r:"15", tipo:"Compuesto", nota:"Inclina el torso para activar más pecho"},
+      {n:"Pull-over con mancuerna", s:3, r:"15", tipo:"Estiramiento", nota:"Estira al máximo, expande la caja torácica"},
     ]
   },
   {
-    dia:"DÍA 2", nombre:"ESPALDA + BÍCEPS", color:"#4D9FFF",
+    dia:"DÍA 2", nombre:"ESPALDA + BÍCEPS", color:"#4D9FFF", tag:"TIRÓN SUPERIOR",
+    nota:"Espalda ancha = silueta más estilizada en V",
     ejercicios:[
-      {n:"Peso muerto con barra", s:4, r:"8–10", nota:"Espalda recta, empuja el suelo, no el peso"},
-      {n:"Remo inclinado con barra", s:4, r:"10–12", nota:"Tira hacia el ombligo, no hacia el pecho"},
-      {n:"Remo mancuerna 1 brazo", s:3, r:"12 c/lado", nota:"Rodilla apoyada, codo pegado al cuerpo"},
-      {n:"Curl bíceps con barra", s:4, r:"10–12", nota:"No balancees el torso, movimiento puro de codo"},
-      {n:"Curl martillo con mancuerna", s:3, r:"12–15", nota:"Muñeca neutra, movimiento lento y controlado"},
+      {n:"Peso muerto con barra", s:4, r:"12", tipo:"Principal", nota:"Espalda recta siempre — no compenses con la lumbar"},
+      {n:"Remo inclinado con barra", s:4, r:"12–15", tipo:"Principal", nota:"Tira hacia el ombligo, codos pegados al cuerpo"},
+      {n:"Remo mancuerna 1 brazo", s:3, r:"15 c/lado", tipo:"Unilateral", nota:"Rodilla apoyada, tira lento y controla la bajada"},
+      {n:"Curl bíceps con barra", s:3, r:"15", tipo:"Bíceps", nota:"Sin balanceo, isométrico arriba 1 seg"},
+      {n:"Curl martillo con mancuerna", s:3, r:"15", tipo:"Bíceps", nota:"Muñeca neutra, movimiento muy lento"},
     ]
   },
   {
-    dia:"DÍA 3", nombre:"PIERNAS + GLÚTEOS", color:"#FFB84D",
+    dia:"DÍA 3", nombre:"PIERNAS + GLÚTEOS", color:"#FFB84D", tag:"TREN INFERIOR",
+    nota:"El músculo más grande — quema más calorías en reposo",
     ejercicios:[
-      {n:"Sentadilla con barra", s:4, r:"10–12", nota:"Baja hasta paralelo, rodillas hacia fuera"},
-      {n:"Peso muerto rumano con barra", s:4, r:"10–12", nota:"Cadera atrás, siente el estiramiento del femoral"},
-      {n:"Zancada con mancuernas", s:3, r:"12 c/lado", nota:"Rodilla trasera cerca del suelo, torso recto"},
-      {n:"Sentadilla sumo con mancuerna", s:3, r:"15", nota:"Pies muy abiertos, activa glúteo al subir"},
-      {n:"Glúteo puente con peso", s:4, r:"15–20", nota:"Pausa 1 seg arriba, disco sobre caderas"},
+      {n:"Sentadilla con barra", s:4, r:"15", tipo:"Principal", nota:"Baja hasta paralelo, rodillas hacia fuera"},
+      {n:"Peso muerto rumano con barra", s:4, r:"12–15", tipo:"Femoral", nota:"Cadera atrás, siente el estiramiento del femoral"},
+      {n:"Zancada con mancuernas", s:3, r:"15 c/lado", tipo:"Compuesto", nota:"Rodilla trasera cerca del suelo, torso recto"},
+      {n:"Sentadilla sumo + mancuerna", s:3, r:"15", tipo:"Glúteo", nota:"Pies muy abiertos, aprieta glúteo al subir"},
+      {n:"Glúteo puente con peso", s:4, r:"20", tipo:"Glúteo", nota:"Pausa 2 seg arriba, disco sobre caderas"},
     ]
   },
   {
-    dia:"DÍA 4", nombre:"HOMBROS + TRAPECIO", color:"#C084FC",
+    dia:"DÍA 4", nombre:"HOMBROS + TRAPECIO", color:"#C084FC", tag:"HOMBRO ANCHO",
+    nota:"Hombros anchos = cintura más estrecha visualmente",
     ejercicios:[
-      {n:"Press militar con barra (de pie)", s:4, r:"8–10", nota:"Core apretado, no arquees la espalda lumbar"},
-      {n:"Elevación lateral con mancuerna", s:4, r:"14–16", nota:"Codos ligeramente doblados, sin impulso"},
-      {n:"Elevación frontal con mancuerna", s:3, r:"12", nota:"Alterna brazos, sube hasta la altura de los ojos"},
-      {n:"Encogimiento de hombros con barra", s:4, r:"15", nota:"Sube y mantén 1 seg arriba, no ruedes los hombros"},
-      {n:"Remo al mentón con barra", s:3, r:"12", nota:"Codos altos, tira hacia la barbilla"},
+      {n:"Press militar con barra (de pie)", s:4, r:"12", tipo:"Principal", nota:"Core apretado, no arquees la lumbar"},
+      {n:"Elevación lateral con mancuerna", s:4, r:"15–18", tipo:"Lateral", nota:"Sin impulso, codos ligeramente doblados"},
+      {n:"Elevación frontal con mancuerna", s:3, r:"15", tipo:"Frontal", nota:"Alterna brazos, sube hasta altura de hombros"},
+      {n:"Encogimiento con barra", s:4, r:"15", tipo:"Trapecio", nota:"Sube y mantén 2 seg arriba, movimiento puro"},
+      {n:"Remo al mentón con barra", s:3, r:"15", tipo:"Compuesto", nota:"Codos altos, tira hacia la barbilla"},
     ]
   },
   {
-    dia:"DÍA 5", nombre:"CORE + FULL BODY", color:"#34D399",
+    dia:"DÍA 5", nombre:"CORE + CARDIO FUERZA", color:"#34D399", tag:"QUEMA + ABDOMEN",
+    nota:"Circuito de 45 seg trabajo / 15 seg descanso entre ejercicios",
     ejercicios:[
-      {n:"Peso muerto (peso ligero, técnica)", s:3, r:"15", nota:"Activación general, enfócate en la forma perfecta"},
-      {n:"Elevación de cadera (abdominal)", s:4, r:"15–20", nota:"Piernas rectas arriba, levanta la cadera del suelo"},
-      {n:"Plancha isométrica", s:3, r:"40 seg", nota:"Cuerpo en línea recta, respira lento y constante"},
-      {n:"Crunch con disco en el pecho", s:4, r:"15", nota:"Contrae el abdomen, no el cuello al subir"},
-      {n:"Russian twist con disco", s:3, r:"20 (10 c/lado)", nota:"Gira desde el core, pies levantados si puedes"},
-      {n:"Extensión de espalda en suelo", s:3, r:"15", nota:"Despega pecho y piernas a la vez, movimiento lento"},
+      {n:"Peso muerto ligero (técnica)", s:3, r:"15", tipo:"Activación", nota:"Peso suave, activa todo el posterior"},
+      {n:"Elevación de cadera (abdominal)", s:4, r:"20", tipo:"Core", nota:"Piernas rectas arriba, levanta la cadera limpio"},
+      {n:"Plancha isométrica", s:3, r:"45 seg", tipo:"Core", nota:"Cuerpo en línea, respira lento, no aguantes el aire"},
+      {n:"Crunch con disco en pecho", s:4, r:"20", tipo:"Abdomen", nota:"Contrae el abdomen, no el cuello al subir"},
+      {n:"Russian twist con disco", s:3, r:"20 c/lado", tipo:"Oblicuos", nota:"Gira desde el core, pies levantados"},
+      {n:"Burpee sin salto", s:3, r:"12", tipo:"Cardio", nota:"Baja al suelo, plancha, levanta — sin salto si molesta la rodilla"},
+    ]
+  }
+];
+
+// COMIDA SEMANAL — ~2300 kcal, ~150g proteína, sin verduras sólidas, cocinado el domingo
+const SEMANA = [
+  {
+    dia:"LUNES", kcal:2280,
+    comidas:[
+      {t:"DESAYUNO · 8:00", n:"Tostadas con atún y huevo", d:"2 tostadas de pan integral + 1 lata atún en aceite escurrido + 2 huevos revueltos", p:38, c:42, g:14},
+      {t:"COMIDA · 14:00", n:"Arroz con pollo al horno", d:"200g arroz cocido + 200g pechuga de pollo al horno con especias + puré de zanahoria", p:52, c:70, g:8},
+      {t:"CENA · 20:30", n:"Tortilla de patata con jamón", d:"3 huevos + 150g patata + 80g jamón serrano + aceite de oliva", p:42, c:30, g:22},
+    ]
+  },
+  {
+    dia:"MARTES", kcal:2310,
+    comidas:[
+      {t:"DESAYUNO · 8:00", n:"Avena con plátano y leche", d:"80g avena + 250ml leche semidesnatada + 1 plátano + 1 cucharada miel", p:22, c:85, g:8},
+      {t:"COMIDA · 14:00", n:"Lentejas con chorizo (sin verduras)", d:"300g lentejas cocidas + 60g chorizo + caldo + pimentón. Puedes triturar si quieres", p:45, c:65, g:16},
+      {t:"CENA · 20:30", n:"Salmón al horno con patata", d:"200g salmón al horno + 200g patata cocida + aceite de oliva + limón", p:48, c:35, g:20},
+    ]
+  },
+  {
+    dia:"MIÉRCOLES", kcal:2270,
+    comidas:[
+      {t:"DESAYUNO · 8:00", n:"Yogur griego con cereales y fruta", d:"2 yogures griegos naturales + 40g cereales sin azúcar + 1 manzana troceada", p:28, c:55, g:10},
+      {t:"COMIDA · 14:00", n:"Pasta con carne picada", d:"200g pasta cocida + 200g carne picada de ternera + tomate frito casero + orégano", p:50, c:72, g:18},
+      {t:"CENA · 20:30", n:"Pechuga a la plancha con arroz", d:"220g pechuga de pollo + 150g arroz + aceite de oliva + ajo en polvo", p:55, c:45, g:9},
+    ]
+  },
+  {
+    dia:"JUEVES", kcal:2290,
+    comidas:[
+      {t:"DESAYUNO · 8:00", n:"Pan con mantequilla de cacahuete y plátano", d:"2 tostadas pan integral + 2 cucharadas mantequilla de cacahuete + 1 plátano + café con leche", p:24, c:68, g:18},
+      {t:"COMIDA · 14:00", n:"Pollo guisado con patatas (sin verduras)", d:"250g muslos de pollo guisados + 250g patata + caldo + especias. Preparado el domingo", p:52, c:48, g:15},
+      {t:"CENA · 20:30", n:"Tortilla francesa con jamón y queso", d:"3 huevos + 60g jamón york + 30g queso rallado + 2 rebanadas pan", p:48, c:28, g:22},
+    ]
+  },
+  {
+    dia:"VIERNES", kcal:2300,
+    comidas:[
+      {t:"DESAYUNO · 8:00", n:"Avena con huevo y leche", d:"70g avena + 1 huevo batido mezclado en la avena caliente + 250ml leche + canela", p:30, c:72, g:12},
+      {t:"COMIDA · 14:00", n:"Merluza al horno con patata", d:"250g merluza al horno + 200g patata al horno + aceite de oliva + ajo + perejil", p:50, c:38, g:10},
+      {t:"CENA · 20:30", n:"Arroz con atún y huevo duro", d:"200g arroz cocido + 2 latas atún escurrido + 2 huevos duros + aceite + sal", p:55, c:58, g:14},
+    ]
+  },
+  {
+    dia:"SÁBADO", kcal:2350,
+    comidas:[
+      {t:"DESAYUNO · 9:00", n:"Huevos revueltos con jamón y pan", d:"3 huevos revueltos + 80g jamón serrano + 2 tostadas + café con leche", p:42, c:38, g:20},
+      {t:"COMIDA · 14:30", n:"Costillas al horno con arroz", d:"300g costillas de cerdo al horno + 180g arroz + especias. Día de capricho controlado", p:55, c:50, g:28},
+      {t:"CENA · 21:00", n:"Sopa de fideos con pollo", d:"150g pechuga desmenuzada + 80g fideos + caldo de pollo casero. Ligero para la noche", p:38, c:32, g:6},
+    ]
+  },
+  {
+    dia:"DOMINGO", kcal:2200,
+    comidas:[
+      {t:"DESAYUNO · 9:30", n:"Tostadas con huevo y aguacate", d:"2 tostadas + 2 huevos a la plancha + ½ aguacate + sal y pimienta", p:28, c:36, g:22},
+      {t:"COMIDA · 14:30", n:"Cocido / Puchero (sin verduras sólidas)", d:"Garbanzos 250g + carne de morcillo + chorizo + caldo. Retira las verduras si las hay", p:58, c:52, g:20},
+      {t:"CENA · 21:00", n:"Cena ligera: yogur + fruta + frutos secos", d:"2 yogures griegos + 1 pieza fruta + 30g nueces. Ligero para preparar la semana", p:22, c:40, g:18},
     ]
   }
 ];
 
 const TIPS = [
-  "🔄 Descansa 60–90 seg entre series para quemar grasa / 2–3 min para ganar fuerza máxima",
-  "📈 Sube el peso cuando puedas completar todas las reps con buena técnica 2 días seguidos",
-  "💧 Hidratación: bebe agua antes, durante y después. Al menos 2L al día",
-  "🍽️ Come suficiente proteína: 1.6–2g por kg de peso corporal al día (huevo, pollo, legumbres)",
-  "😴 El músculo crece mientras descansas — duerme 7–8 horas de calidad",
-  "📅 Descansa sábado y domingo, o intercambia un día de descanso con el Día 5",
-  "🔥 Para bajar grasa: deficit calórico de 300–500 kcal/día. Sin deficit no hay pérdida de grasa",
-  "⚡ Calienta 5–10 min antes: movilidad articular, saltos suaves, rotaciones",
+  "🔄 Descansa 60–90 seg entre series. Ese tiempo activa más la quema de grasa que el descanso largo",
+  "📈 Sube el peso solo cuando puedas completar TODAS las reps con técnica perfecta 2 días seguidos",
+  "🚶 Camina 30 min los sábados y domingos — sin necesidad de correr, caminar en déficit quema grasa",
+  "💧 Bebe 2.5–3L de agua al día. La hidratación acelera el metabolismo y reduce el hambre",
+  "🍽️ El déficit calórico es el 80% del resultado. Tu objetivo: ~2.300 kcal/día",
+  "🥩 Proteína objetivo: 150g/día. Sin proteína suficiente perderás músculo además de grasa",
+  "😴 Duerme 7–8 horas. El cortisol alto por falta de sueño acumula grasa abdominal",
+  "📅 Cocina el domingo en batch: arroz, pollo, lentejas y patata para toda la semana",
+  "⚡ Calienta 5–8 min antes: movilidad articular, rotaciones de hombro, sentadillas sin peso",
+  "📉 Perder 0.5–1kg/semana es el ritmo ideal — más rápido significa perder músculo también",
 ];
 
-let currentDay = 0;
-let currentView = 'rutina';
-let progress = JSON.parse(localStorage.getItem('gym_progress') || '{}');
+// ─────────────────────────────────────────
+// STATE
+// ─────────────────────────────────────────
+let curDay = 0;
+let curView = 'rutina';
+let curFoodDay = 0;
+let prog = JSON.parse(localStorage.getItem('gp') || '{}');
+const save = () => localStorage.setItem('gp', JSON.stringify(prog));
+const key = (d,e) => `${d}-${e}`;
+const dayDone = d => DIAS[d].ejercicios.every((_,i) => prog[key(d,i)]);
 
-function save() { localStorage.setItem('gym_progress', JSON.stringify(progress)); }
-
-function getKey(d, e) { return `${d}-${e}`; }
-
-function isDayDone(d) {
-  return DIAS[d].ejercicios.every((_, i) => progress[getKey(d,i)]);
-}
-
+// ─────────────────────────────────────────
+// RENDER
+// ─────────────────────────────────────────
 function buildTabs() {
-  const container = document.getElementById('tabs-scroll');
-  container.innerHTML = '';
-  DIAS.forEach((dia, i) => {
-    const btn = document.createElement('button');
-    btn.className = 'tab-btn' + (i === currentDay ? ' active' : '') + (isDayDone(i) ? ' done' : '');
-    btn.style.setProperty('--tab-color', dia.color);
-    btn.innerHTML = `<span class="tab-num">${i+1}</span><span>${dia.dia.replace('DÍA ','DÍA ')}</span><span class="tab-done-dot"></span>`;
-    btn.onclick = () => { currentDay = i; render(); };
-    container.appendChild(btn);
+  const c = document.getElementById('tabs');
+  c.innerHTML = '';
+  DIAS.forEach((d,i) => {
+    const b = document.createElement('button');
+    b.className = 'tab' + (i===curDay?' active':'') + (dayDone(i)?' done':'');
+    b.style.setProperty('--tc', d.color);
+    b.innerHTML = `<span class="tnum">${i+1}</span><span style="font-size:8px">${d.tag}</span><span class="tdot"></span>`;
+    b.onclick = () => { curDay=i; render(); };
+    c.appendChild(b);
   });
 }
 
 function updateHeader() {
-  const dia = DIAS[currentDay];
-  document.getElementById('day-label').textContent = `${dia.dia} · ${dia.nombre}`;
-  document.getElementById('day-label').style.color = dia.color;
-  document.getElementById('prog-bar').style.background = dia.color;
-
-  const total = dia.ejercicios.length;
-  const done = dia.ejercicios.filter((_,i) => progress[getKey(currentDay,i)]).length;
-  const pct = total ? (done/total)*100 : 0;
-  document.getElementById('prog-bar').style.width = pct + '%';
-  document.getElementById('prog-text').textContent = `${done}/${total}`;
-  document.getElementById('prog-text').style.color = pct === 100 ? 'var(--green)' : 'var(--muted)';
+  const d = DIAS[curDay];
+  document.getElementById('day-pill').textContent = d.dia;
+  document.getElementById('day-pill').style.cssText = `border-color:${d.color};color:${d.color};background:color-mix(in srgb,${d.color} 10%,transparent)`;
+  document.getElementById('prog-fill').style.setProperty('background', d.color);
+  const tot = d.ejercicios.length;
+  const done = d.ejercicios.filter((_,i) => prog[key(curDay,i)]).length;
+  const pct = tot ? (done/tot)*100 : 0;
+  document.getElementById('prog-fill').style.width = pct+'%';
+  document.getElementById('prog-num').textContent = `${done}/${tot}`;
+  document.getElementById('prog-num').style.color = pct===100 ? 'var(--green)' : 'var(--muted)';
 }
 
 function renderRutina() {
-  const dia = DIAS[currentDay];
-  let html = `<div class="day-header" style="--day-color:${dia.color}">
-    <h2>${dia.nombre}</h2>
-    <div class="day-sub">${dia.ejercicios.length} ejercicios · Toca para marcar completado</div>
+  const d = DIAS[curDay];
+  let h = `<div class="day-hdr fadein" style="--dc:${d.color}">
+    <div class="dtag">${d.tag}</div>
+    <h2>${d.nombre}</h2>
+    <div class="dsub">${d.nota}</div>
   </div>`;
-
-  dia.ejercicios.forEach((ej, i) => {
-    const done = !!progress[getKey(currentDay,i)];
-    html += `<div class="ex-card${done?' done':''}" onclick="toggle(${i})" style="--day-color:${dia.color}">
+  d.ejercicios.forEach((ej,i) => {
+    const done = !!prog[key(curDay,i)];
+    h += `<div class="ex fadein${done?' done':''}" onclick="toggle(${i})" style="--dc:${d.color}" style="animation-delay:${i*0.04}s">
       <div class="ex-inner">
-        <div class="ex-check">${done ? '✓' : ''}</div>
-        <div class="ex-info">
+        <div class="chk">${done?'✓':''}</div>
+        <div class="ex-body">
           <div class="ex-name">${ej.n}</div>
           <div class="ex-badges">
-            <span class="badge" style="--badge-color:${dia.color}">${ej.s} series</span>
-            <span class="badge gray">${ej.r} reps</span>
+            <span class="bdg col">${ej.s} series</span>
+            <span class="bdg neu">${ej.r} reps</span>
+            <span class="bdg tip">${ej.tipo}</span>
           </div>
           <div class="ex-nota">→ ${ej.nota}</div>
         </div>
       </div>
     </div>`;
   });
-  return html;
+  h += `<div style="text-align:center;margin-top:10px">
+    <button onclick="resetDay()" style="background:var(--s2);border:1px solid var(--border);color:var(--muted);font-family:var(--font);font-size:11px;font-weight:700;padding:7px 16px;border-radius:20px;cursor:pointer">↺ Reiniciar día</button>
+  </div>`;
+  return h;
+}
+
+function renderComida() {
+  // Week day tabs
+  const dias = ['L','M','X','J','V','S','D'];
+  const nombres = ['LUN','MAR','MIÉ','JUE','VIE','SÁB','DOM'];
+  let h = '<div class="week-tabs">';
+  dias.forEach((d,i) => {
+    h += `<button class="wtab${i===curFoodDay?' active':''}" onclick="setFoodDay(${i})">${nombres[i]}</button>`;
+  });
+  h += '</div>';
+
+  const fd = SEMANA[curFoodDay];
+  // Macro summary
+  const totalP = fd.comidas.reduce((a,c)=>a+c.p,0);
+  const totalC = fd.comidas.reduce((a,c)=>a+c.c,0);
+  const totalG = fd.comidas.reduce((a,c)=>a+c.g,0);
+  h += `<div class="macro-sum fadein">
+    <div class="macro-sum-title">RESUMEN NUTRICIONAL · ${fd.dia} · ${fd.kcal} KCAL</div>
+    <div class="macro-bars">
+      <div class="mbar-row"><span class="mbar-label" style="color:#3ecf6e">🥩 Proteína</span><div class="mbar-bg"><div class="mbar-fill" style="width:${Math.min(totalP/160*100,100)}%;background:#3ecf6e"></div></div><span class="mbar-val" style="color:#3ecf6e">${totalP}g</span></div>
+      <div class="mbar-row"><span class="mbar-label" style="color:#60a5fa">🍚 Carbos</span><div class="mbar-bg"><div class="mbar-fill" style="width:${Math.min(totalC/280*100,100)}%;background:#60a5fa"></div></div><span class="mbar-val" style="color:#60a5fa">${totalC}g</span></div>
+      <div class="mbar-row"><span class="mbar-label" style="color:#f59e0b">🥑 Grasas</span><div class="mbar-bg"><div class="mbar-fill" style="width:${Math.min(totalG/80*100,100)}%;background:#f59e0b"></div></div><span class="mbar-val" style="color:#f59e0b">${totalG}g</span></div>
+    </div>
+  </div>`;
+
+  h += `<div class="day-food fadein">`;
+  fd.comidas.forEach(m => {
+    h += `<div class="meal">
+      <div class="meal-time">${m.t}</div>
+      <div class="meal-name">${m.n}</div>
+      <div class="meal-desc">${m.d}</div>
+      <div class="meal-macros">
+        <span class="macro p">🥩 ${m.p}g prot</span>
+        <span class="macro c">🍚 ${m.c}g carbos</span>
+        <span class="macro g">🥑 ${m.g}g grasa</span>
+      </div>
+    </div>`;
+  });
+  h += '</div>';
+
+  h += `<div class="tip-card fadein">📅 <strong>Prep dominical:</strong> Cocina arroz, pechuga, lentejas y patata el domingo. Guarda en tupers por días en la nevera. Así solo calientas en la semana.</div>`;
+  h += `<div class="tip-card fadein">⚖️ <strong>Objetivo semanal:</strong> ~2.300 kcal/día con ~150g proteína. En déficit de ~500 kcal respecto a tu mantenimiento de ~2.800 kcal.</div>`;
+  return h;
 }
 
 function renderTips() {
-  let html = '<div class="section-title">CONSEJOS CLAVE</div>';
-  TIPS.forEach(t => { html += `<div class="tip-card">${t}</div>`; });
-  return html;
+  let h = '<div class="slabel">CONSEJOS CLAVE</div>';
+  TIPS.forEach(t => { h += `<div class="tip-card fadein">${t}</div>`; });
+  return h;
 }
 
 function renderEquipo() {
-  return `
-  <div class="section-title">TU EQUIPO</div>
-  <div class="equipo-card">
-    <div class="equipo-row"><span class="icon">🏋️</span><div><strong>Barra larga</strong><br><span>Press de banca, peso muerto, remo, press militar</span></div></div>
-    <div class="equipo-row"><span class="icon">💪</span><div><strong>2 barras cortas</strong><br><span>Mancuernas ajustables con discos</span></div></div>
-    <div class="equipo-row"><span class="icon">🔵</span><div><strong>6× 5kg</strong><br><span>= 30kg en discos de 5kg</span></div></div>
-    <div class="equipo-row"><span class="icon">🟡</span><div><strong>4× 2.5kg</strong><br><span>= 10kg en discos de 2.5kg</span></div></div>
-    <div class="equipo-row"><span class="icon">⚪</span><div><strong>4× 1.25kg</strong><br><span>= 5kg en discos de 1.25kg</span></div></div>
-    <div class="equipo-row"><span class="icon">📊</span><div><strong>Total disponible: ~45kg</strong><br><span>Mancuerna máx ~15kg · Barra larga máx ~30kg</span></div></div>
-  </div>
-  <div class="section-title" style="margin-top:20px">COMBINACIONES ÚTILES</div>
-  <div class="tip-card">🏋️ <strong>Barra de calentamiento</strong> (sólo barra): ~5kg · Para aprender técnica</div>
-  <div class="tip-card">💪 <strong>Mancuerna ligera</strong>: 1.25+1.25 = 2.5kg c/lado · Elevaciones laterales</div>
-  <div class="tip-card">💪 <strong>Mancuerna media</strong>: 2.5+2.5 = 5kg c/lado · Curl, press hombro</div>
-  <div class="tip-card">💪 <strong>Mancuerna fuerte</strong>: 5+5 = 10kg c/lado · Remo, press inclinado</div>
-  <div class="tip-card">🏋️ <strong>Barra pesada</strong>: 2×5+2×5+barra ≈ 25kg · Peso muerto, sentadilla</div>`;
+  let h = '<div class="slabel">TU EQUIPO</div>';
+  h += `<div class="eq-card fadein">
+    <div class="eq-row"><span class="eq-icon">🏋️</span><div class="eq-txt"><strong>Barra larga</strong><span>Press banca, peso muerto, remo, press militar</span></div></div>
+    <div class="eq-row"><span class="eq-icon">💪</span><div class="eq-txt"><strong>2 barras cortas (mancuernas)</strong><span>Curl, elevaciones, remo 1 brazo, pull-over</span></div></div>
+    <div class="eq-row"><span class="eq-icon">🔵</span><div class="eq-txt"><strong>6 discos × 5kg = 30kg</strong><span>Base del peso en barra larga</span></div></div>
+    <div class="eq-row"><span class="eq-icon">🟡</span><div class="eq-txt"><strong>4 discos × 2.5kg = 10kg</strong><span>Ajuste intermedio</span></div></div>
+    <div class="eq-row"><span class="eq-icon">⚪</span><div class="eq-txt"><strong>4 discos × 1.25kg = 5kg</strong><span>Microajuste de progresión</span></div></div>
+    <div class="eq-row"><span class="eq-icon">📊</span><div class="eq-txt"><strong>Total: ~45kg disponibles</strong><span>Mancuerna máx ~15kg · Barra máx ~30kg total</span></div></div>
+  </div>`;
+  h += '<div class="slabel">COMBINACIONES DE PESO</div>';
+  h += `<div class="eq-card fadein">
+    <div class="eq-row"><span class="eq-icon">1️⃣</span><div class="eq-txt"><strong>Mancuerna ligera · 2.5kg</strong><span>1.25+1.25 — Elevaciones laterales, curl ligero</span></div></div>
+    <div class="eq-row"><span class="eq-icon">2️⃣</span><div class="eq-txt"><strong>Mancuerna media · 5kg</strong><span>2.5+2.5 — Curl bíceps, press hombro</span></div></div>
+    <div class="eq-row"><span class="eq-icon">3️⃣</span><div class="eq-txt"><strong>Mancuerna fuerte · 7.5kg</strong><span>5+2.5 — Remo 1 brazo, pull-over</span></div></div>
+    <div class="eq-row"><span class="eq-icon">4️⃣</span><div class="eq-txt"><strong>Mancuerna máxima · 12.5kg</strong><span>5+5+2.5 — Remo pesado, zancada</span></div></div>
+    <div class="eq-row"><span class="eq-icon">5️⃣</span><div class="eq-txt"><strong>Barra pesada · ~25-30kg</strong><span>Peso muerto, sentadilla, press militar</span></div></div>
+  </div>`;
+  return h;
 }
 
 function render() {
   buildTabs();
   updateHeader();
-  const content = document.getElementById('content');
-  if (currentView === 'rutina') content.innerHTML = renderRutina();
-  else if (currentView === 'tips') content.innerHTML = renderTips();
-  else content.innerHTML = renderEquipo();
-
-  // nav active state
-  ['rutina','tips','equipo'].forEach(v => {
-    document.getElementById('nav-'+v).classList.toggle('active', v === currentView);
+  const main = document.getElementById('main');
+  if (curView==='rutina') main.innerHTML = renderRutina();
+  else if (curView==='comida') main.innerHTML = renderComida();
+  else if (curView==='tips') main.innerHTML = renderTips();
+  else main.innerHTML = renderEquipo();
+  ['rutina','comida','tips','equipo'].forEach(v => {
+    document.getElementById('nb-'+v).classList.toggle('active', v===curView);
   });
-
-  content.scrollTo(0,0);
+  main.scrollTo(0,0);
+  // set nav accent color per view
+  const colors = {rutina:'#FF4D4D',comida:'#f59e0b',tips:'#60a5fa',equipo:'#C084FC'};
+  document.documentElement.style.setProperty('--accent-nav', colors[curView]);
 }
 
-function toggle(ejIdx) {
-  const key = getKey(currentDay, ejIdx);
-  progress[key] = !progress[key];
-  save();
-  render();
-
-  if (isDayDone(currentDay)) {
-    const banner = document.getElementById('done-banner');
-    banner.classList.add('show');
-    setTimeout(() => banner.classList.remove('show'), 2500);
+function toggle(idx) {
+  const k = key(curDay,idx);
+  prog[k] = !prog[k];
+  save(); render();
+  if (dayDone(curDay)) {
+    const b = document.getElementById('banner');
+    b.classList.add('show');
+    setTimeout(()=>b.classList.remove('show'),2500);
   }
 }
 
 function resetDay() {
-  DIAS[currentDay].ejercicios.forEach((_,i) => { delete progress[getKey(currentDay,i)]; });
+  DIAS[curDay].ejercicios.forEach((_,i) => delete prog[key(curDay,i)]);
   save(); render();
 }
 
-function showView(v) {
-  currentView = v; render();
-}
+function setView(v) { curView=v; render(); }
+function setFoodDay(i) { curFoodDay=i; render(); }
 
-// init
 render();
 </script>
 </body>
 </html>
+HTMLEOF
+echo "done"
